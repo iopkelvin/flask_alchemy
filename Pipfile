@@ -7,6 +7,7 @@ name = "pypi"
 flask-jwt = "*"
 flask-sqlalchemy = "*"
 flask-restful = "*"
+uwsgi = "*"
 
 [dev-packages]
 
