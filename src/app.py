@@ -17,16 +17,12 @@ app.config['PROPAGATE_EXCEPTIONS'] = True
 app.secret_key = 'kelvin'
 api = Api(app)
 
-# db.init_app(app)
-@app.before_first_request
-def create_tables():
-    db.create_all()
 
 jwt = JWT(app, authenticate, identity)  # auth
 
-api.add_resource(Item, '/item/<string:name>')  # http://127.0.0.1:5000/item/..
+api.add_resource(Store, '/store/<string:name>')  # http://127.0.0.1:5000/item/..
 api.add_resource(StoreList, '/stores')
-api.add_resource(Item, 'item/<string:name>')
+api.add_resource(Item, '/item/<string:name>')
 api.add_resource(ItemList, '/items')
 api.add_resource(UserRegister, '/register')
 
