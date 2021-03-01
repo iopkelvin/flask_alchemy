@@ -2,8 +2,9 @@ from db import db
 
 
 class UserModel(db.Model):
+    # Specify table name for SQLAlchemy
     __tablename__ = 'users'
-
+    # Specify columns
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80))
     password = db.Column(db.String(80))

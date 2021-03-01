@@ -8,6 +8,7 @@ from resources.item import Item, ItemList
 from resources.store import Store, StoreList
 
 app = Flask(__name__)
+# SQLAlchemy will use the database created at root
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
 # Turns off Flask SQL Alchemy modification tracker, not the library's
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
