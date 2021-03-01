@@ -50,4 +50,7 @@ class Item(Resource):  # inheritance
 
 class ItemList(Resource):
     def get(self):
-        return {'items': list(map(lambda x: x.json(), ItemModel.query.all()))}
+        # return {'items': list(map(lambda x: x.json(), ItemModel.query.all()))}
+
+        # List comprehensions version
+        return {'items': [item.json() for item in ItemModel.query.all()]}
