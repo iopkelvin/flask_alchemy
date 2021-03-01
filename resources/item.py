@@ -24,7 +24,9 @@ class Item(Resource):  # inheritance
         try:
             data = ItemSchema().load(json_data)
         except ValidationError as err:
-            return make_response(jsonify(err.messages)), 422
+            response = jsonify(err.messages)
+            response.status_code = 422
+            return response
 
         item = ItemModel(name, **data)
 
