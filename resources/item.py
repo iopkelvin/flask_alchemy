@@ -1,4 +1,4 @@
-from flask import request, jsonify
+from flask import request, jsonify, make_response
 from flask_restful import Resource
 from flask_jwt import jwt_required
 from models.item import ItemModel, ItemSchema
@@ -24,7 +24,7 @@ class Item(Resource):  # inheritance
         try:
             data = ItemSchema().load(json_data)
         except ValidationError as err:
-            return jsonify(err.messages), 422
+            return make_response(jsonify(err.messages)), 422
 
         item = ItemModel(name, **data)
 
