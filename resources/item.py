@@ -17,14 +17,14 @@ class Item(Resource):  # inheritance
             return {'message': "An item with name '{}' already exists.".format(name)}, 400  # bad request
 
         data = request.get_json()
-        item = ItemModel(name, ItemSchema().load(**data))
+        item = ItemModel(name, **data)
 
         try:
             item.save_to_db()
         except ValueError:
             return {"message": "An error occurred inserting the item."}, 500  # Internal server error
 
-        return item.json(), 201  # created status code
+        return ItemSchema.jsonify(item), 201  # created status code
 
     def delete(self, name):
         item = ItemModel.find_by_name(name)
