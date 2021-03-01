@@ -54,10 +54,11 @@ class Item(Resource):  # inheritance
         # Item is already there, but characteristics will be modified
         if item:  # Specify which parameters will be modified
             item.price = json_data['price']
+            item.save_to_db()
         else:
             item = ItemModel(name, **data)
+            item.save_to_db()
 
-        item.save_to_db()
         return item.json()
 
 
