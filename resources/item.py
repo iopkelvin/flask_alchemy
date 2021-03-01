@@ -1,8 +1,7 @@
-import sqlite3
 from flask import request
 from flask_restful import Resource
 from flask_jwt import jwt_required
-from models.item import ItemModel
+from models.item import ItemModel, ItemSchema
 
 
 class Item(Resource):  # inheritance
@@ -18,7 +17,7 @@ class Item(Resource):  # inheritance
             return {'message': "An item with name '{}' already exists.".format(name)}, 400  # bad request
 
         data = request.get_json()
-        item = ItemModel(name, **data)
+        item = ItemModel(name, ItemSchema().load(**data))
 
         try:
             item.save_to_db()

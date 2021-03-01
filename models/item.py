@@ -1,4 +1,11 @@
 from db import db
+from marshmallow import Schema, fields, ValidationError
+
+
+class ItemSchema(Schema):
+    name = fields.String(required=True)
+    price = fields.Int(required=True)
+    store_id = fields.Int(required=True)
 
 
 class ItemModel(db.Model):
@@ -38,3 +45,5 @@ class ItemModel(db.Model):
     def delete_from_db(self):
         db.session.delete(self)
         db.session.commit()
+
+
