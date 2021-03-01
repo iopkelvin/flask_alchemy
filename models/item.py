@@ -1,13 +1,15 @@
 from db import db
-# from marshmallow import Schema, fields, ValidationError
-from app import app
-from flask_marshmallow import Marshmallow
+from marshmallow import Schema, fields, ValidationError
+# from app import app
+# from flask_marshmallow import Marshmallow
 
-ma = Marshmallow(app)
-# class ItemSchema(Schema):
-#     name = fields.String(required=True)
-#     price = fields.Float(required=True)
-#     store_id = fields.Integer(required=True)
+# ma = Marshmallow(app)
+
+
+class ItemSchema(Schema):
+    name = fields.String(required=True)
+    price = fields.Float(required=True)
+    store_id = fields.Integer(required=True)
 
 
 class ItemModel(db.Model):
@@ -49,10 +51,6 @@ class ItemModel(db.Model):
         db.session.commit()
 
 
-class ItemSchema(ma.SQLAlchemySchema):
-    class Meta:
-        model = ItemModel
-
-    # name = ma.auto_field()
-    # price = ma.auto_field()
-    # store_id = ma.auto_field()
+# class ItemSchema(ma.SQLAlchemySchema):
+#     class Meta:
+#         model = ItemModel
