@@ -43,19 +43,20 @@ class Item(Resource):  # inheritance
 
     def put(self, name):
         json_data = request.get_json()
-        try:  # Make sure that input in equal to schema
-            data = ItemSchema().load(json_data)
-        except ValidationError as err:
-            response = jsonify(err.messages)
-            response.status_code = 422
-            return response
 
         item = ItemModel.find_by_name(name)
         # Item is already there, but characteristics will be modified
         if item:  # Specify which parameters will be modified
             item.price = json_data['price']
             item.save_to_db()
+
         else:
+            try:  # Make sure that input in equal to schema
+                data = ItemSchema().load(json_data)
+            except ValidationError as err:
+                response = jsonify(err.messages)
+                response.status_code = 422
+                return response
             item = ItemModel(name, **data)
             item.save_to_db()
 
