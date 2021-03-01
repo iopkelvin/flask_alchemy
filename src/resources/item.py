@@ -18,7 +18,7 @@ class Item(Resource):  # inheritance
             return {'message': "An item with name '{}' already exists.".format(name)}, 400  # bad request
 
         data = request.get_json()
-        item = ItemModel(name, data['price'])
+        item = ItemModel(name, **data)
 
         try:
             item.save_to_db()
@@ -31,16 +31,18 @@ class Item(Resource):  # inheritance
         item = ItemModel.find_by_name(name)
         if item:
             item.delete_from_db()
+            return {'message': 'Item deleted'}
+        return {'message': 'Item not found'}, 404
 
     def put(self, name):
         data = request.get_json()
 
         item = ItemModel.find_by_name(name)
 
-        if item is None:
-            item = ItemModel(name, data['price'])
-        else:
+        if item:
             item.price = data['price']
+        else:
+            item = ItemModel(name, **data)
 
         item.save_to_db()
         return item.json()
@@ -48,15 +50,4 @@ class Item(Resource):  # inheritance
 
 class ItemList(Resource):
     def get(self):
-        connection = sqlite3.connect('data.db')
-        cursor = connection.cursor()
-
-        query = "SELECT * FROM items"
-        result = cursor.execute(query)
-        items = []
-        for row in result:
-            items.append({'name': row[0], 'price': row[1]})
-
-        connection.close()
-
-        return {'items': items}
+        return {'items': list(map(lambda x: x.json(), ItemModel.query.all()))}
