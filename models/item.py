@@ -7,7 +7,7 @@ from marshmallow import Schema, fields, ValidationError
 
 
 class ItemSchema(Schema):
-    name = fields.String(required=True)
+    # name = fields.String(required=True)
     price = fields.Float(required=True)
     store_id = fields.Integer(required=True)
 
