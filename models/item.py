@@ -1,9 +1,5 @@
 from db import db
 from marshmallow import Schema, fields, ValidationError
-# from app import app
-# from flask_marshmallow import Marshmallow
-
-# ma = Marshmallow(app)
 
 
 class ItemSchema(Schema):
@@ -14,19 +10,22 @@ class ItemSchema(Schema):
 
 class ItemModel(db.Model):
     __tablename__ = 'items'
-
+    # Create table columns
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80))
     price = db.Column(db.Float(precision=2))
 
+    # column from a different table
     store_id = db.Column(db.Integer, db.ForeignKey('stores.id'))
     store = db.relationship('StoreModel')
 
+    # Parameters to be expected
     def __init__(self, name, price, store_id):
         self.name = name
         self.price = price
         self.store_id = store_id
 
+    # Json response
     def json(self):
         return {'id': self.id,
                 'name': self.name,
@@ -50,7 +49,3 @@ class ItemModel(db.Model):
         db.session.delete(self)
         db.session.commit()
 
-
-# class ItemSchema(ma.SQLAlchemySchema):
-#     class Meta:
-#         model = ItemModel

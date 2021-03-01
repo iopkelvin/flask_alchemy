@@ -1,25 +1,25 @@
-from flask import request, jsonify, make_response
+from flask import request, jsonify
 from flask_restful import Resource
 from flask_jwt import jwt_required
 from models.item import ItemModel, ItemSchema
-from marshmallow import ValidationError
+from marshmallow import ValidationError  # To raise errors from Marshmallow schema
 
 
 class Item(Resource):  # inheritance
     @jwt_required()
     def get(self, name):
-        item = ItemModel.find_by_name(name)
+
+        item = ItemModel.find_by_name(name)  # queries table and returns first, by parameter
         if item:
-            return item.json()
+            return item.json()  # json format response (can modify model)
         return {'message': 'Item not found'}, 404  # Not Found
 
     def post(self, name):
         if ItemModel.find_by_name(name):
             return {'message': "An item with name '{}' already exists.".format(name)}, 400  # bad request
-
         json_data = request.get_json()
 
-        try:
+        try:  # Make sure that input in equal to schema
             data = ItemSchema().load(json_data)
         except ValidationError as err:
             response = jsonify(err.messages)
@@ -27,7 +27,6 @@ class Item(Resource):  # inheritance
             return response
 
         item = ItemModel(name, **data)
-
         try:
             item.save_to_db()
         except ValueError:
@@ -44,18 +43,16 @@ class Item(Resource):  # inheritance
 
     def put(self, name):
         json_data = request.get_json()
-
-        item = ItemModel.find_by_name(name)
-
-        try:
+        try:  # Make sure that input in equal to schema
             data = ItemSchema().load(json_data)
         except ValidationError as err:
             response = jsonify(err.messages)
             response.status_code = 422
             return response
 
+        item = ItemModel.find_by_name(name)
         # Item is already there, but characteristics will be modified
-        if item:
+        if item:  # Specify which parameters will be modified
             item.price = json_data['price']
         else:
             item = ItemModel(name, **data)
@@ -66,7 +63,5 @@ class Item(Resource):  # inheritance
 
 class ItemList(Resource):
     def get(self):
-        # return {'items': list(map(lambda x: x.json(), ItemModel.query.all()))}
-
         # List comprehensions version
         return {'items': [item.json() for item in ItemModel.find_all()]}

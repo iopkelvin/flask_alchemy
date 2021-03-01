@@ -2,10 +2,10 @@ import os
 
 from flask import Flask
 from flask_restful import Api
-from flask_jwt import JWT
+from flask_jwt import JWT  # Security
 
-from security import authenticate, identity
-from resources.user import UserRegister, User
+from security import authenticate, identity  # Modules for JWT
+from resources.user import UserRegister, User  # To authenticate
 from resources.item import Item, ItemList
 from resources.store import Store, StoreList
 
@@ -22,10 +22,6 @@ app.config['PROPAGATE_EXCEPTIONS'] = True
 app.secret_key = 'kelvin'
 api = Api(app)
 
-# @app.before_first_request
-# def create_tables():
-#     db.create_all()
-
 jwt = JWT(app, authenticate, identity)  # auth
 
 api.add_resource(Store, '/store/<string:name>')  # http://127.0.0.1:5000/item/..
@@ -37,6 +33,7 @@ api.add_resource(UserRegister, '/register')
 api.add_resource(User, '/user/<int:user_id>')
 
 if __name__ == '__main__':
+    # If app.py is run, then the following will be run.
     from db import db
     db.init_app(app)
 

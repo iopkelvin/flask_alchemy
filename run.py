@@ -1,3 +1,5 @@
+# This file will be run first. It instantiates the database with the app, then it creates the tables.
+
 from app import app
 from db import db
 
