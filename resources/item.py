@@ -9,9 +9,11 @@ class Item(Resource):  # inheritance
     @jwt_required()
     def get(self, name):
         item = ItemModel.find_by_name(name)
-        if item:
-            return item.json()
-        return {'message': 'Item not found'}, 404  # Not Found
+        # if item:
+        #     return item.json()
+        item_result = ItemSchema().dump(item)
+        return jsonify(item_result)
+        # return {'message': 'Item not found'}, 404  # Not Found
 
     def post(self, name):
         if ItemModel.find_by_name(name):
@@ -19,8 +21,6 @@ class Item(Resource):  # inheritance
 
         json_data = request.get_json()
 
-        # if not json_data:
-        #     return jsonify({"message": "No input data provided"}), 400
         try:
             data = ItemSchema().load(json_data)
         except ValidationError as err:
