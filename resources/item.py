@@ -1,4 +1,4 @@
-from flask import request
+from flask import request, jsonify
 from flask_restful import Resource
 from flask_jwt import jwt_required
 from models.item import ItemModel, ItemSchema
@@ -16,7 +16,15 @@ class Item(Resource):  # inheritance
         if ItemModel.find_by_name(name):
             return {'message': "An item with name '{}' already exists.".format(name)}, 400  # bad request
 
-        data = request.get_json()
+        json_data = request.get_json()
+
+        if not json_data:
+            return jsonify({"message": "No input data provided"}), 400
+        try:
+            data = ItemSchema.load(json_data)
+        except ValueError as err:
+            return jsonify(err), 422
+
         item = ItemModel(name, **data)
 
         try:
@@ -24,7 +32,7 @@ class Item(Resource):  # inheritance
         except ValueError:
             return {"message": "An error occurred inserting the item."}, 500  # Internal server error
 
-        return ItemSchema.jsonify(item), 201  # created status code
+        return item.json(), 201  # created status code
 
     def delete(self, name):
         item = ItemModel.find_by_name(name)
