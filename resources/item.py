@@ -21,7 +21,7 @@ class Item(Resource):  # inheritance
         if not json_data:
             return jsonify({"message": "No input data provided"}), 400
         try:
-            data = ItemSchema.load(json_data)
+            data = ItemSchema().load(json_data)
         except ValueError as err:
             return jsonify(err), 422
 
