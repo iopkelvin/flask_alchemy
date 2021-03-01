@@ -4,8 +4,8 @@ from marshmallow import Schema, fields, ValidationError
 
 class ItemSchema(Schema):
     name = fields.String(required=True)
-    price = fields.Int(required=True)
-    store_id = fields.Int(required=True)
+    price = fields.Float(required=True)
+    store_id = fields.Integer(required=True)
 
 
 class ItemModel(db.Model):
