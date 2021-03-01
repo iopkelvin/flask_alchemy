@@ -18,12 +18,12 @@ class Item(Resource):  # inheritance
 
         json_data = request.get_json()
 
-        if not json_data:
-            return jsonify({"message": "No input data provided"}), 400
+        # if not json_data:
+        #     return jsonify({"message": "No input data provided"}), 400
         try:
             data = ItemSchema().load(json_data)
         except ValueError as err:
-            return jsonify(err), 422
+            return jsonify(err.messages), 422
 
         item = ItemModel(name, **data)
 
