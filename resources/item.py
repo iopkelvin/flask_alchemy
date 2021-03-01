@@ -2,6 +2,7 @@ from flask import request, jsonify
 from flask_restful import Resource
 from flask_jwt import jwt_required
 from models.item import ItemModel, ItemSchema
+from marshmallow import ValidationError
 
 
 class Item(Resource):  # inheritance
@@ -22,7 +23,7 @@ class Item(Resource):  # inheritance
         #     return jsonify({"message": "No input data provided"}), 400
         try:
             data = ItemSchema().load(json_data)
-        except ValueError as err:
+        except ValidationError as err:
             return jsonify(err.messages), 422
 
         item = ItemModel(name, **data)
